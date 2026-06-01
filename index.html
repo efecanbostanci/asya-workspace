@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asya | Modern Workspace</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    
+    <aside id="sidebarContainer" class="sidebar" style="padding-top: 15px;">
+        <div style="padding: 0 20px 20px 20px; border-bottom: 1px solid #f1f5f9; margin-bottom: 15px;">
+            <h2 style="margin: 0; color: var(--primary); font-size: 24px; font-weight: 800; letter-spacing: 1px;">ASYA</h2>
+        </div>
+        <nav style="flex: 1; padding: 0 15px; display: flex; flex-direction: column; gap: 8px;">
+            <div class="sidebar-item active" data-target="dashboard" style="display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 8px; cursor: pointer;">
+                <i class="fa-solid fa-house"></i> Anasayfa
+            </div>
+            <div class="sidebar-item" data-target="board" style="display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 8px; cursor: pointer;">
+                <i class="fa-solid fa-list-check"></i> Görev Panosu
+            </div>
+            <div class="sidebar-item" data-target="chat" style="display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 8px; cursor: pointer;">
+                <i class="fa-solid fa-robot"></i> Asistan
+            </div>
+            <div class="sidebar-item" data-target="health" style="display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 8px; cursor: pointer;">
+                <i class="fa-solid fa-heart-pulse"></i> Sağlık & Beslenme
+            </div>
+            <div class="sidebar-item" data-target="investments" style="display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 8px; cursor: pointer;">
+                <i class="fa-solid fa-chart-line"></i> Yatırımlar
+            </div>
+        </nav>
+        <div style="padding: 0 15px; margin-top: auto; padding-bottom: 20px;">
+            <div class="sidebar-item" id="logoutBtn" style="display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 8px; cursor: pointer; color: #ef4444;">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Çıkış Yap
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="top-header">
+            <div class="brand-logo">ASYA</div>
+            <div class="profile-area">
+                <span class="profile-name" id="userNameDisplay">Kullanıcı (Sen)</span>
+                <div class="profile-avatar">AS</div>
+            </div>
+        </header>
+
+        <section id="dashboard" class="page active">
+            <header style="margin-bottom: 25px;">
+                <h2 style="color: var(--text-dark); font-size: 22px;">Günün Özeti</h2>
+                <p style="color: var(--text-muted); font-size: 13px;">Asya ile bugünün verimlilik tablosu.</p>
+            </header>
+
+            <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
+                <div class="card" style="padding: 15px; border-radius: 12px; border-left: 4px solid var(--primary); display: flex; align-items: center; justify-content: space-between;">
+                    <div><div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">TOPLAM</div><div id="stat-total" style="font-size: 24px; font-weight: 800; color: var(--text-dark);">0</div></div>
+                    <i class="fa fa-list" style="font-size: 20px; color: var(--primary); opacity: 0.5;"></i>
+                    <div id="bar-total" style="display:none;"></div></div>
+                
+                <div class="card" style="padding: 15px; border-radius: 12px; border-left: 4px solid var(--warning); display: flex; align-items: center; justify-content: space-between;">
+                    <div><div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">YAPILACAK</div><div id="stat-todo" style="font-size: 24px; font-weight: 800; color: var(--text-dark);">0</div></div>
+                    <i class="fa fa-pause" style="font-size: 20px; color: var(--warning); opacity: 0.5;"></i>
+                    <div id="bar-todo" style="display:none;"></div>
+                </div>
+
+                <div class="card" style="padding: 15px; border-radius: 12px; border-left: 4px solid var(--info); display: flex; align-items: center; justify-content: space-between;">
+                    <div><div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">İŞLEMDE</div><div id="stat-doing" style="font-size: 24px; font-weight: 800; color: var(--text-dark);">0</div></div>
+                    <i class="fa fa-spinner" style="font-size: 20px; color: var(--info); opacity: 0.5;"></i>
+                    <div id="bar-doing" style="display:none;"></div>
+                </div>
+
+                <div class="card" style="padding: 15px; border-radius: 12px; border-left: 4px solid var(--success); display: flex; align-items: center; justify-content: space-between;">
+                    <div><div style="font-size: 12px; color: var(--text-muted); font-weight: 600;">BİTEN</div><div id="stat-done" style="font-size: 24px; font-weight: 800; color: var(--text-dark);">0</div></div>
+                    <i class="fa fa-check" style="font-size: 20px; color: var(--success); opacity: 0.5;"></i>
+                    <div id="bar-done" style="display:none;"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="card" style="flex: 2; min-width: 300px; display: flex; flex-direction: column; background: #ffffff; border: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dark);">
+                            <i class="fa-regular fa-note-sticky" style="color: var(--warning);"></i> Hızlı Notlar
+                        </h3>
+                        <span id="noteStatus" style="font-size: 11px; color: var(--success); transition: opacity 0.3s; opacity: 0;">
+                            <i class="fa-solid fa-check"></i> Kaydedildi
+                        </span>
+                    </div>
+                    <textarea id="quickNotesArea" placeholder="Aklına gelenleri, anlık fikirlerini veya ufak hatırlatmaları buraya yaz... (Otomatik kaydedilir)" style="flex: 1; resize: none; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; font-family: inherit; font-size: 14px; outline: none; min-height: 120px; background: #f8fafc; color: var(--text-dark);"></textarea>
+                </div>
+
+                <div class="card" style="flex: 1; min-width: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <h3 style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Görev Dağılımı</h3>
+                    <div style="width: 140px; height: 140px;">
+                        <canvas id="donutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="board" class="page" style="display:none;">
+            <div class="control-hub">
+                <div class="search-box">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Görevlerde ara...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Tümü</button>
+                    <button class="filter-btn" data-filter="high">🔥 Yüksek Öncelik</button>
+                    <button class="filter-btn" data-filter="overdue">⏰ Gecikenler</button>
+                </div>
+            </div>
+
+            <div class="centered-action">
+                <button type="button" id="openNewTaskModalBtn" class="btn-primary" style="padding: 12px 30px; font-size: 15px; border-radius: 30px; box-shadow: 0 4px 10px rgba(22,170,255,0.3);">
+                    <i class="fa-solid fa-plus" style="margin-right: 8px;"></i> Yeni Görev Oluştur
+                </button>
+            </div>
+            
+            <div class="board-container">
+                <div class="column"><h4>Bekleyenler</h4><div id="todo" class="task-list"></div></div>
+                <div class="column"><h4>İşlemde</h4><div id="doing" class="task-list"></div></div>
+                <div class="column"><h4>Bitti</h4><div id="done" class="task-list"></div></div>
+            </div>
+        </section>
+
+        <section id="chat" class="page" style="display:none;">
+            <div class="chat-container">
+                <div class="chat-quick-actions">
+                    <button class="chat-action-btn" data-cmd="daily goalcheck"><i class="fa-solid fa-calendar-check"></i> Daily Goalcheck</button>
+                    <button class="chat-action-btn" data-cmd="user roadmap"><i class="fa-solid fa-map-location-dot"></i> User Roadmap</button>
+                    <button class="chat-action-btn" data-cmd="monthly checkpoint"><i class="fa-solid fa-chart-pie"></i> Monthly Checkpoint</button>
+                    <button class="chat-action-btn" data-cmd="carrier checkpoint"><i class="fa-solid fa-briefcase"></i> Career Checkpoint</button>
+                    <button class="chat-action-btn" data-cmd="dashboard access"><i class="fa-solid fa-chart-line"></i> Dashboard Access</button>
+                    <button class="chat-action-btn" data-cmd="tutorial"><i class="fa-solid fa-circle-question"></i> Tutorial</button>
+                </div>
+
+                <div id="chatMessages" class="chat-messages"></div>
+                <form id="chatInputForm" class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Asistanına komut ver veya bir şey sor..." required>
+                    <button type="submit" class="btn-primary-icon"><i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </section>
+
+        <section id="investments" class="page" style="display:none;">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 style="color: var(--text-dark);">Portföy Yönetimi</h2>
+                <button type="button" id="openInvestmentModalBtn" class="btn-primary" style="padding: 10px 20px; border-radius: 20px;">
+                    <i class="fa-solid fa-plus"></i> Yeni Varlık Ekle
+                </button>
+            </header>
+
+            <div class="stats-grid" style="margin-bottom: 30px;">
+                <div class="card" style="border-left: 4px solid var(--primary);">
+                    <div class="card-title">Toplam Yatırım Maliyeti</div>
+                    <div class="card-value" id="total-invested">₺0.00</div>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--info);">
+                    <div class="card-title">Güncel Portföy Değeri</div>
+                    <div class="card-value" id="total-current">₺0.00</div>
+                </div>
+                <div class="card" id="profit-card" style="border-left: 4px solid var(--success);">
+                    <div class="card-title">Toplam Kar/Zarar</div>
+                    <div class="card-value" id="total-profit">₺0.00</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px;">
+                <div class="card" style="flex: 2;">
+                    <h3 style="margin-bottom: 15px; font-size: 16px;">Varlıklarım</h3>
+                    <div class="table-responsive">
+                        <table class="asya-table" id="investmentTable">
+                            <thead>
+                                <tr>
+                                    <th>Tür</th>
+                                    <th>Varlık (Sembol)</th>
+                                    <th>Miktar</th>
+                                    <th>Ort. Maliyet</th>
+                                    <th>Güncel Fiyat</th>
+                                    <th>Kar/Zarar</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="investmentList">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card" style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                    <h3 style="margin-bottom: 15px; font-size: 16px; align-self: flex-start;">Varlık Dağılımı</h3>
+                    <div style="width: 100%; max-width: 250px;">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="health" class="page" style="display:none;">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div>
+                    <h2 style="color: var(--text-dark); margin-bottom: 5px;"><i class="fa-solid fa-notes-medical" style="color: var(--danger);"></i> Akıllı Sağlık Asistanı</h2>
+                    <span style="color: var(--text-muted); font-size: 13px;">Yapay Zeka Destekli Semptom Analizi ve Yönlendirme Sistemi</span>
+                </div>
+                <div class="profile-avatar" style="background: var(--primary); font-size: 12px; width: 35px; height: 35px;">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+            </header>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                
+                <div class="card" style="flex: 1; min-width: 350px; display: flex; flex-direction: column; height: 650px;">
+                    <h3 style="margin-bottom: 5px; font-size: 16px; color: var(--text-dark);">Tıbbi Danışman (Sohbet Paneli)</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Semptomlarınızı veya sağlık sorularınızı doğal bir dille ifade edin.</p>
+                    
+                    <div id="healthChatMessages" class="chat-messages" style="flex: 1; background: #f8fafc; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                        <div class="chat-message ai-message" style="background: #fff5f5; color: var(--danger); border: 1px solid #feb2b2; padding: 12px 16px; border-radius: 16px 16px 16px 0; margin-bottom: 12px; align-self: flex-start; max-width: 85%; line-height:1.5;">
+                            <strong>Merhaba! Ben Akıllı Sağlık Asistanınız.</strong><br>
+                            Semptomlarınızı bana detaylıca yazabilirsiniz. Unutmayın; amacım teşhis koymak değil, size hızlı bilgi sağlamak ve gerektiğinde doğru sağlık kuruluşuna yönlendirmektir.
+                        </div>
+                    </div>
+                    
+                    <form id="healthChatForm" style="display: flex; gap: 10px;">
+                        <input type="text" id="healthChatInput" class="modal-input" placeholder="Örn: İki gündür şiddetli baş ağrım ve hafif ateşim var..." style="margin-bottom: 0; flex: 1;" required>
+                        <button type="submit" class="btn-primary" style="padding: 0 20px; background: var(--danger);"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+
+                <div class="card" style="flex: 1; min-width: 350px; overflow-y: auto; height: 650px; background: #ffffff;">
+                    <h3 style="margin-bottom: 15px; font-size: 18px; color: var(--text-dark); border-bottom: 2px solid #eef2ff; padding-bottom: 10px;">
+                        <i class="fa-solid fa-bullseye" style="color: var(--primary);"></i> Proje Hakkında
+                    </h3>
+                    
+                    <div style="font-size: 13px; line-height: 1.6; color: var(--text-dark);">
+                        <p>Günümüzde sağlık hizmetlerine hızlı ve doğru şekilde erişim önemli bir ihtiyaç haline gelmiştir. Hastaların basit sağlık soruları için dahi hastanelere başvurması zaman kaybına ve sistemde yoğunluğa neden olmaktadır.</p>
+                        <p>Bu proje, kullanıcıların temel sorularına hızlı cevap alabilmesini sağlayan <strong>yapay zeka destekli bir sağlık asistanı</strong> geliştirmeyi amaçlamaktadır.</p>
+                        
+                        <div style="background: #fffbeb; border-left: 4px solid var(--warning); padding: 12px 15px; margin: 15px 0; border-radius: 4px; color: #92400e;">
+                            <strong><i class="fa-solid fa-triangle-exclamation"></i> Kapsam ve Uyarı:</strong> Sistem tıbbi teşhis koymak yerine <u>bilgilendirme ve yönlendirme</u> amacıyla kullanılacaktır.
+                        </div>
+
+                        <h4 style="color: var(--text-dark); margin: 20px 0 10px 0; font-size: 14px;"><i class="fa-solid fa-lightbulb" style="color: var(--warning);"></i> Yenilikçi Yönümüz</h4>
+                        <p style="color: var(--text-muted);">Mevcut sağlık bilgi platformları çoğunlukla statik bilgi sunarken, bu sistem doğal dil ile etkileşim kurarak dinamik, kullanıcı odaklı bir deneyim sağlar ve hastaları uygun kurumlara yönlendirir.</p>
+
+                        <h4 style="color: var(--text-dark); margin: 20px 0 10px 0; font-size: 14px;"><i class="fa-solid fa-list-check" style="color: var(--success);"></i> Proje Hedefleri</h4>
+                        <ul style="padding-left: 20px; color: var(--text-muted); margin-bottom: 20px;">
+                            <li style="margin-bottom: 6px;">Kullanıcıların doğal dil ile soru sorabileceği bir sohbet tabanlı asistan geliştirmek.</li>
+                            <li style="margin-bottom: 6px;">Semptom bilgilerini analiz edebilen yapay zeka tabanlı bir sistem oluşturmak.</li>
+                            <li style="margin-bottom: 6px;">Güvenilir ve bilgilendirici içerik sunan bir veri altyapısı geliştirmek.</li>
+                            <li style="margin-bottom: 6px;">Kullanıcıları gerekli durumlarda uygun sağlık kurumlarına yönlendirmek.</li>
+                            <li style="margin-bottom: 6px;">Herkesin kolaylıkla kullanabileceği kullanıcı dostu bir arayüz tasarlamak.</li>
+                        </ul>
+
+                        <h4 style="color: var(--text-dark); margin: 20px 0 10px 0; font-size: 14px;"><i class="fa-solid fa-rocket" style="color: var(--info);"></i> Beklenen Çıktılar</h4>
+                        <p style="color: var(--text-muted);">Sağlık okuryazarlığını artırıp sağlık sistemindeki gereksiz yoğunluğu azaltmayı hedefleyen bu sistem, ilerleyen aşamalarda geliştirilmeye uygun bir <strong>start-up fikri</strong> veya sağlık teknolojileri ürünü potansiyeline sahiptir.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="width: 100%; margin-top: 20px;">
+                <h3 style="margin-bottom: 15px; font-size: 16px; color: var(--text-dark); border-bottom: 2px solid #eef2ff; padding-bottom: 10px;">
+                    <i class="fa-solid fa-apple-whole" style="color: var(--success);"></i> Günlük Kalori ve Beslenme Takibi
+                </h3>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    
+                    <div style="flex: 1; min-width: 300px;">
+                        <div class="search-box" style="width: 100%; margin-bottom: 15px; border: 1px solid var(--border-color); background: white;">
+                            <i class="fa-solid fa-search" style="color: var(--text-muted);"></i>
+                            <input type="text" id="foodSearchInput" placeholder="Yediğiniz ürünü arayın (Örn: Yumurta, Elma)..." style="font-size: 13px;">
+                        </div>
+                        <div id="foodSearchResults" style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; background: #fff;">
+                            </div>
+                    </div>
+
+                    <div style="flex: 1; min-width: 300px; background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <span style="font-weight: 700; font-size: 14px; color: var(--text-dark);">Bugün Tüketilenler</span>
+                            <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;" id="currentDateDisplay">Tarih</span>
+                        </div>
+                        
+                        <div id="consumedFoodsList" style="flex: 1; min-height: 120px; max-height: 150px; overflow-y: auto; margin-bottom: 15px; padding-right: 5px;">
+                            </div>
+
+                        <div style="border-top: 2px dashed var(--border-color); padding-top: 15px; margin-top: auto;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-weight: 600; font-size: 14px;">Toplam Alınan:</span>
+                                <span style="font-weight: 800; font-size: 16px; color: var(--primary);" id="totalCaloriesDisplay">0 kcal</span>
+                            </div>
+                            
+                            <div style="width: 100%; background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; margin-bottom: 5px;">
+                                <div id="calorieProgressBar" style="width: 0%; height: 100%; background: var(--success); transition: 0.4s ease;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); font-weight: 600;">
+                                <span>0</span>
+                                <span>Hedef: 2000 kcal</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="editTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: var(--text-dark);">Görev Ayarları</h3>
+                <span id="closeEditModalBtn" class="close-icon">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label class="input-label">GÖREV ADI</label>
+                <input type="text" id="modalTaskTitleInput" class="modal-input" style="font-size: 16px; font-weight: 600; color: var(--text-dark);">
+
+                <div style="display: flex; gap: 15px; margin-top: 15px;">
+                    <div style="flex: 1;">
+                        <label class="input-label">ANA ÖNCELİK</label>
+                        <select id="taskPriority" class="modal-input" style="cursor: pointer;">
+                            <option value="none">Belirtilmedi</option>
+                            <option value="low">Düşük</option>
+                            <option value="medium">Orta</option>
+                            <option value="high">Yüksek</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label class="input-label">SON TARİH</label>
+                        <input type="date" id="taskDeadline" class="modal-input">
+                    </div>
+                </div>
+
+                <label class="input-label" style="margin-top: 15px;">ETİKETLER (Virgülle ayır)</label>
+                <input type="text" id="taskTags" class="modal-input" placeholder="Örn: Acil, Tasarım">
+                
+                <label class="input-label" style="margin-top: 15px;">ANA GÖREV NOTU</label>
+                <textarea id="taskDescription" class="modal-input" placeholder="Genel görev detayları..." style="height: 80px;"></textarea>
+                
+                <input type="hidden" id="currentEditingTaskId">
+                <button type="button" id="saveEditBtn" class="btn-primary w-100" style="margin-top: 25px; padding: 12px; font-size: 15px;">Ayarları Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+<div id="subtaskBoardModal" class="modal">
+        <div class="modal-content" style="width: 900px; max-width: 95%; max-height: 90vh; overflow-y: auto;">
+            
+            <div class="modal-header" style="align-items: flex-start; padding-bottom: 10px;">
+                <div style="flex: 1; margin-right: 20px;">
+                    <input type="text" id="boardModalTitleInput" class="modal-input" style="font-size: 24px; font-weight: 800; color: var(--text-dark); border: none; padding: 0; margin-bottom: 5px; background: transparent;" placeholder="Görev Başlığı">
+                    
+                    <div style="display: flex; gap: 20px; align-items: center; margin-top: 10px; flex-wrap: wrap;">
+                        <div>
+                            <label class="input-label" style="display:inline; margin-right: 5px;">SON TARİH:</label>
+                            <input type="date" id="boardModalDate" style="border: 1px solid var(--border-color); border-radius: 6px; padding: 6px; font-size: 13px; outline: none; color: var(--text-dark);">
+                        </div>
+                        <div>
+                            <label class="input-label" style="display:inline; margin-right: 5px;">ÖNCELİK:</label>
+                            <select id="boardModalPriority" style="border: 1px solid var(--border-color); border-radius: 6px; padding: 6px; font-size: 13px; outline: none; cursor: pointer;">
+                                <option value="low">Düşük</option>
+                                <option value="medium">Orta</option>
+                                <option value="high">Yüksek</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <span id="closeBoardModalBtn" class="close-icon">&times;</span>
+            </div>
+            
+            <div class="modal-body">
+                <label class="input-label">GÖREV İÇERİĞİ / NOTLAR</label>
+                <textarea id="boardModalDescription" class="modal-input" placeholder="Bu görevde adım adım neler yapılacak? Detayları, linkleri veya notları buraya yazın..." style="min-height: 100px; resize: vertical; line-height: 1.5;"></textarea>
+
+                <h3 style="font-size: 14px; margin: 20px 0 10px 0; color: var(--text-dark); border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                    <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Alt Görevler (Yapılacaklar Listesi)
+                </h3>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                    <input type="text" id="newMiniTaskTitle" class="modal-input" placeholder="Hızlıca bir adım / alt görev ekle..." style="margin-bottom: 0; flex: 2;">
+                    <select id="newMiniTaskPriority" class="modal-input" style="width: 140px; margin-bottom: 0;">
+                        <option value="low">Düşük</option>
+                        <option value="medium" selected>Orta</option>
+                        <option value="high">Yüksek</option>
+                    </select>
+                    <button type="button" id="addMiniTaskBtn" class="btn-primary" style="padding: 0 25px;">Ekle</button>
+                </div>
+
+                <div class="mini-board-container">
+                    <div class="mini-column">
+                        <h4 style="font-size: 12px; margin-bottom: 10px; color: var(--text-muted); text-align: center;">BEKLEYEN ADIMLAR</h4>
+                        <div id="mini-todo" class="mini-task-list"></div>
+                    </div>
+                    <div class="mini-column">
+                        <h4 style="font-size: 12px; margin-bottom: 10px; color: var(--info); text-align: center;">İŞLEMDE</h4>
+                        <div id="mini-doing" class="mini-task-list"></div>
+                    </div>
+                    <div class="mini-column">
+                        <h4 style="font-size: 12px; margin-bottom: 10px; color: var(--success); text-align: center;">BİTENLER</h4>
+                        <div id="mini-done" class="mini-task-list"></div>
+                    </div>
+                </div>
+                
+                <input type="hidden" id="currentBoardTaskId">
+
+                <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
+                    <button type="button" id="saveSubtaskBoardBtn" class="btn-primary" style="padding: 12px 30px; font-size: 15px; border-radius: 8px;">
+                        <i class="fa-solid fa-floppy-disk" style="margin-right: 8px;"></i> Tüm Detayları Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="investmentModal" class="modal">
+        <div class="modal-content" style="width: 400px;">
+            <div class="modal-header">
+                <h3>Yeni Varlık Ekle</h3>
+                <span id="closeInvModalBtn" class="close-icon">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label class="input-label">VARLIK TÜRÜ</label>
+                <select id="invType" class="modal-input">
+                    <option value="crypto">Kripto Para</option>
+                    <option value="stock">Hisse Senedi</option>
+                    <option value="gold">Altın / Emtia</option>
+                    <option value="fiat">Döviz / Nakit</option>
+                </select>
+                
+                <label class="input-label">SEMBOL / İSİM</label>
+                <input type="text" id="invSymbol" class="modal-input" placeholder="Örn: BTC, AAPL, Gram Altın">
+                
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label class="input-label">MİKTAR</label>
+                        <input type="number" id="invAmount" class="modal-input" step="any" placeholder="0.00">
+                    </div>
+                    <div style="flex: 1;">
+                        <label class="input-label">ALIM FİYATI (₺)</label>
+                        <input type="number" id="invPrice" class="modal-input" step="any" placeholder="0.00">
+                    </div>
+                </div>
+                
+                <button type="button" id="saveInvBtn" class="btn-primary w-100" style="margin-top: 15px;">Portföye Ekle</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal" style="z-index: 2000;">
+        <div class="modal-content" style="width: 380px; text-align: center; padding: 40px 30px;">
+            <div style="font-size: 50px; color: var(--danger); margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h3 style="margin-bottom: 15px; color: var(--text-dark); font-size: 20px;">Emin misin?</h3>
+            <p id="confirmMessage" style="color: var(--text-muted); font-size: 14px; margin-bottom: 30px; line-height: 1.5;">Bu görevi kalıcı olarak silmek istediğine emin misin? Bu işlem geri alınamaz.</p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button id="confirmCancelBtn" class="btn-secondary" style="flex: 1;">İptal</button>
+                <button id="confirmDeleteBtn" class="btn-danger" style="flex: 1;">Evet, Sil</button>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

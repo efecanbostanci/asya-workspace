@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asya | Giriş Yap</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--bg-color); margin: 0; }
+        .auth-box { background: white; padding: 40px; border-radius: 16px; width: 360px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="auth-box">
+        <h2 style="text-align: center; margin-bottom: 10px; color: var(--text-dark); font-size: 28px; font-weight: 800; letter-spacing: 1px;">ASYA</h2>
+        <p style="text-align: center; font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Kişisel çalışma alanınıza giriş yapın</p>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+            <button type="button" id="tabLogin" class="btn-primary" style="flex: 1; border-radius: 8px;">Giriş</button>
+            <button type="button" id="tabRegister" class="btn-secondary" style="flex: 1; border-radius: 8px;">Kayıt Ol</button>
+        </div>
+
+        <form id="loginForm">
+            <label class="input-label" style="font-size: 11px;">KULLANICI ADI</label>
+            <input type="text" id="loginUser" class="modal-input" placeholder="Örn: asya_user" required style="margin-bottom: 15px;">
+            <label class="input-label" style="font-size: 11px;">ŞİFRE</label>
+            <input type="password" id="loginPass" class="modal-input" placeholder="••••••••" required>
+            <button type="submit" class="btn-primary w-100" style="margin-top: 20px; padding: 12px; border-radius: 8px;">Giriş Yap</button>
+        </form>
+
+        <form id="registerForm" style="display: none;">
+            <label class="input-label" style="font-size: 11px;">YENİ KULLANICI ADI</label>
+            <input type="text" id="regUser" class="modal-input" placeholder="Kendinize bir ad belirleyin" required style="margin-bottom: 15px;">
+            <label class="input-label" style="font-size: 11px;">YENİ ŞİFRE</label>
+            <input type="password" id="regPass" class="modal-input" placeholder="Güçlü bir şifre girin" required>
+            <button type="submit" class="btn-primary w-100" style="margin-top: 20px; padding: 12px; border-radius: 8px; background: var(--success);">Hesap Oluştur</button>
+        </form>
+        
+        <div id="authMessage" style="text-align: center; margin-top: 20px; font-size: 13px; font-weight: 600; min-height: 15px;"></div>
+    </div>
+
+    <script type="module" src="js/login.js"></script> 
+</body>
+</html>
