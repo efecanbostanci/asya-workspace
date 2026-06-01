@@ -46,4 +46,4 @@ def delete_task(current_user, task_id):
     task = Task.query.filter_by(id=task_id, user_id=current_user.id).first_or_404()
     db.session.delete(task)
     db.session.commit()
-    return jsonify({'message': 'Görev silindi!'})
+    return jsonify({'message': 'Görev silindi!'})"# KAN-38 Code Review Verifikasyonu" 
