@@ -21,4 +21,4 @@ class AIService:
             return response.text
             
         except Exception as e:
-            raise Exception(f"Gemini API Bağlantı Hatası: {str(e)}")
+            raise Exception(f"Gemini API Bağlantı Hatası: {str(e)}")"# KAN-21 Code Review Verifikasyonu" 
